@@ -29,6 +29,7 @@ Project {
             "cli/wavreader.cpp",
             "src/wavreader.cpp",
             "src/wavreader.h",
+            "src/audioreader.h",
         ]
 
         Group {

@@ -29,9 +29,9 @@ public:
     static const size_t AUDIOMIXER_BUFFER_LENGTH = AUDIOMIXER_BUFFER_SIZE / 4;
 
 public:
-    AudioMixer(WavReader::TellCallback tell_callback,
-               WavReader::SeekCallback seek_callback,
-               WavReader::ReadCallback read_callback,
+    AudioMixer(AudioReader::TellCallback tell_callback,
+               AudioReader::SeekCallback seek_callback,
+               AudioReader::ReadCallback read_callback,
                TrackEndCallback track_end_callback,
                unsigned int channels);
 
@@ -72,14 +72,14 @@ public:
 
     size_t play(int16_t *buffer, size_t frames);
 
-    unsigned int channels()
-    {
-        return channels_;
-    }
-
     unsigned long samplingRate()
     {
         return sampling_rate_;
+    }
+
+    unsigned int channels()
+    {
+        return channels_;
     }
 
 private:

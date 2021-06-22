@@ -22,9 +22,9 @@ static inline int16_t saturate(int32_t value)
 #endif
 }
 
-AudioMixer::AudioMixer(WavReader::TellCallback tell_callback,
-                       WavReader::SeekCallback seek_callback,
-                       WavReader::ReadCallback read_callback,
+AudioMixer::AudioMixer(AudioReader::TellCallback tell_callback,
+                       AudioReader::SeekCallback seek_callback,
+                       AudioReader::ReadCallback read_callback,
                        TrackEndCallback track_end_callback,
                        unsigned int channels)
     : tracks_(),

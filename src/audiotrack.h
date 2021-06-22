@@ -8,7 +8,7 @@
 class AudioTrack
 {
 public:
-    typedef WavReader::Mode Mode;
+    typedef AudioReader::Mode Mode;
 
     enum class Fade
     {
@@ -34,14 +34,14 @@ public:
 public:
     AudioTrack();
 
-    AudioTrack(WavReader::TellCallback tell_callback,
-               WavReader::SeekCallback seek_callback,
-               WavReader::ReadCallback read_callback,
+    AudioTrack(AudioReader::TellCallback tell_callback,
+               AudioReader::SeekCallback seek_callback,
+               AudioReader::ReadCallback read_callback,
                unsigned int channels);
 
-    void init(WavReader::TellCallback tell_callback,
-              WavReader::SeekCallback seek_callback,
-              WavReader::ReadCallback read_callback,
+    void init(AudioReader::TellCallback tell_callback,
+              AudioReader::SeekCallback seek_callback,
+              AudioReader::ReadCallback read_callback,
               unsigned int channels);
 
     bool start(void *file,
@@ -77,14 +77,14 @@ public:
         return reader_.mode();
     }
 
-    unsigned int channels()
-    {
-        return channels_;
-    }
-
     unsigned long samplingRate()
     {
         return reader_.samplingRate();
+    }
+
+    unsigned int channels()
+    {
+        return channels_;
     }
 
 private:

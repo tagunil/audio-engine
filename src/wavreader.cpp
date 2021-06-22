@@ -28,10 +28,9 @@
 WavReader::WavReader(TellCallback tell_callback,
                      SeekCallback seek_callback,
                      ReadCallback read_callback)
-    : opened_(false),
-      tell_callback_(tell_callback),
-      seek_callback_(seek_callback),
-      read_callback_(read_callback)
+    : AudioReader(tell_callback,
+                  seek_callback,
+                  read_callback)
 {
 }
 
@@ -39,9 +38,9 @@ void WavReader::init(WavReader::TellCallback tell_callback,
                      WavReader::SeekCallback seek_callback,
                      WavReader::ReadCallback read_callback)
 {
-    tell_callback_ = tell_callback;
-    seek_callback_ = seek_callback;
-    read_callback_ = read_callback;
+    AudioReader::init(tell_callback,
+                      seek_callback,
+                      read_callback);
 }
 
 bool WavReader::open(void *file_context,

@@ -45,24 +45,24 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    WavReader::Mode mode = WavReader::Mode::Single;
+    AudioReader::Mode mode = AudioReader::Mode::Single;
 
     if (argc >= 3) {
         switch (argv[2][0]) {
         case 'c':
-            mode = WavReader::Mode::Continuous;
+            mode = AudioReader::Mode::Continuous;
             break;
         case 's':
         default:
-            mode = WavReader::Mode::Single;
+            mode = AudioReader::Mode::Single;
         }
     }
 
     switch (mode) {
-    case WavReader::Mode::Single:
+    case AudioReader::Mode::Single:
         printf("Single mode\n");
         break;
-    case WavReader::Mode::Continuous:
+    case AudioReader::Mode::Continuous:
         printf("Continuous mode\n");
         break;
     }

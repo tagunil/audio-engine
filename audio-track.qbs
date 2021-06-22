@@ -32,6 +32,7 @@ Project {
             "src/audiotrack.h",
             "src/wavreader.cpp",
             "src/wavreader.h",
+            "src/audioreader.h",
             "src/cosine.cpp",
             "src/cosine.h",
         ]

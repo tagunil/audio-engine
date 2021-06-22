@@ -44,9 +44,9 @@ AudioTrack::AudioTrack()
 {
 }
 
-AudioTrack::AudioTrack(WavReader::TellCallback tell_callback,
-                       WavReader::SeekCallback seek_callback,
-                       WavReader::ReadCallback read_callback,
+AudioTrack::AudioTrack(AudioReader::TellCallback tell_callback,
+                       AudioReader::SeekCallback seek_callback,
+                       AudioReader::ReadCallback read_callback,
                        unsigned int channels)
     : initialized_(true),
       channels_(channels),
@@ -66,9 +66,9 @@ AudioTrack::AudioTrack(WavReader::TellCallback tell_callback,
 {
 }
 
-void AudioTrack::init(WavReader::TellCallback tell_callback,
-                      WavReader::SeekCallback seek_callback,
-                      WavReader::ReadCallback read_callback,
+void AudioTrack::init(AudioReader::TellCallback tell_callback,
+                      AudioReader::SeekCallback seek_callback,
+                      AudioReader::ReadCallback read_callback,
                       unsigned int channels)
 {
     reader_.init(tell_callback, seek_callback, read_callback);
