@@ -25,6 +25,29 @@
 #endif
 #endif
 
+WavReader::WavReader()
+    : AudioReader(nullptr,
+                  nullptr,
+                  nullptr),
+      file_size_(0),
+      format_(Format::Unknown),
+      bytes_per_second_(0),
+      bits_per_sample_(0),
+      block_alignment_(0),
+      frame_size_(0),
+      channel_size_(0),
+      initial_data_chunk_offset_(0),
+      final_data_chunk_offset_(0),
+      next_data_chunk_offset_(0),
+      current_data_chunk_frames_(0),
+      frame_buffer_(),
+      prefetched_frames_(0),
+      current_frame_(nullptr),
+      next_frame_(nullptr),
+      silence_(false)
+{
+}
+
 WavReader::WavReader(TellCallback tell_callback,
                      SeekCallback seek_callback,
                      ReadCallback read_callback)
@@ -50,9 +73,9 @@ WavReader::WavReader(TellCallback tell_callback,
 {
 }
 
-void WavReader::init(WavReader::TellCallback tell_callback,
-                     WavReader::SeekCallback seek_callback,
-                     WavReader::ReadCallback read_callback)
+void WavReader::init(TellCallback tell_callback,
+                     SeekCallback seek_callback,
+                     ReadCallback read_callback)
 {
     AudioReader::init(tell_callback,
                       seek_callback,

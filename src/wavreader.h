@@ -26,6 +26,8 @@ public:
     static const unsigned int MAX_FRAME_SIZE = 16;
 
 public:
+    WavReader();
+
     WavReader(TellCallback tell_callback,
               SeekCallback seek_callback,
               ReadCallback read_callback);
