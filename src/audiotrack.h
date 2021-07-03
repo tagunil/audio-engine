@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "wavreader.h"
+#include "audioreader.h"
 
 class AudioTrack
 {
@@ -34,14 +34,10 @@ public:
 public:
     AudioTrack();
 
-    AudioTrack(AudioReader::TellCallback tell_callback,
-               AudioReader::SeekCallback seek_callback,
-               AudioReader::ReadCallback read_callback,
+    AudioTrack(AudioReader *reader,
                unsigned int channels);
 
-    void init(AudioReader::TellCallback tell_callback,
-              AudioReader::SeekCallback seek_callback,
-              AudioReader::ReadCallback read_callback,
+    void init(AudioReader *reader,
               unsigned int channels);
 
     bool start(void *file,
@@ -74,12 +70,12 @@ public:
 
     Mode mode()
     {
-        return reader_.mode();
+        return reader_ ? reader_->mode() : Mode::Single;
     }
 
     unsigned long samplingRate()
     {
-        return reader_.samplingRate();
+        return reader_ ? reader_->samplingRate() : 0;
     }
 
     unsigned int channels()
@@ -106,7 +102,7 @@ private:
     uint16_t initial_level_;
     uint16_t final_level_;
 
-    WavReader reader_;
+    AudioReader *reader_;
     void *file_;
 
     bool running_;

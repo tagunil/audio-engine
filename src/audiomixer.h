@@ -7,6 +7,7 @@
 #define AUDIOMIXER_BUFFER_SIZE 4096
 #endif
 
+#include "wavreader.h"
 #include "audiotrack.h"
 
 class AudioMixer
@@ -85,6 +86,7 @@ public:
 private:
     int32_t sample_buffer_[AUDIOMIXER_BUFFER_LENGTH];
 
+    WavReader readers_[TRACKS];
     Track tracks_[TRACKS];
 
     TrackEndCallback track_end_callback_;

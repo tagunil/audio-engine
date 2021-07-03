@@ -27,7 +27,8 @@ AudioMixer::AudioMixer(AudioReader::TellCallback tell_callback,
                        AudioReader::ReadCallback read_callback,
                        TrackEndCallback track_end_callback,
                        unsigned int channels)
-    : tracks_(),
+    : readers_(),
+      tracks_(),
       track_end_callback_(track_end_callback),
       sampling_rate_(0),
       channels_(channels),
@@ -35,9 +36,10 @@ AudioMixer::AudioMixer(AudioReader::TellCallback tell_callback,
 
 {
     for (int track = 0; track < TRACKS; track++) {
-        tracks_[track].init(tell_callback,
-                            seek_callback,
-                            read_callback,
+        readers_[track].init(tell_callback,
+                             seek_callback,
+                             read_callback);
+        tracks_[track].init(&readers_[track],
                             channels);
     }
 }

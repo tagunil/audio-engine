@@ -5,6 +5,7 @@
 #include <pulse/simple.h>
 #include <pulse/error.h>
 
+#include "wavreader.h"
 #include "audiotrack.h"
 
 size_t tell_callback(void *file_context)
@@ -52,10 +53,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    AudioTrack track(&tell_callback,
+    WavReader reader(&tell_callback,
                      &seek_callback,
-                     &read_callback,
-                     2);
+                     &read_callback);
+    AudioTrack track(&reader, 2);
 
     AudioTrack::Mode mode = AudioTrack::Mode::Single;
 
