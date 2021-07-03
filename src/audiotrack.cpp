@@ -71,6 +71,7 @@ bool AudioTrack::start(void *file,
     for (int slot = 0; slot < READER_SLOTS; slot++) {
         if (readers_[slot] && readers_[slot]->open(file, mode, preload)) {
             reader_ = readers_[slot];
+            break;
         }
     }
 
