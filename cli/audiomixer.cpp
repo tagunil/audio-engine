@@ -63,11 +63,20 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    AudioMixer mixer(&tell_callback,
-                     &seek_callback,
-                     &read_callback,
-                     &track_end_callback,
+    WavReader reader_1(&tell_callback,
+                       &seek_callback,
+                       &read_callback);
+    AudioTrack track_1(&reader_1, 2);
+
+    WavReader reader_2(&tell_callback,
+                       &seek_callback,
+                       &read_callback);
+    AudioTrack track_2(&reader_2, 2);
+
+    AudioMixer mixer(&track_end_callback,
                      2);
+    mixer.addTrack(&track_1);
+    mixer.addTrack(&track_2);
 
     AudioTrack::Mode mode = AudioTrack::Mode::Single;
 

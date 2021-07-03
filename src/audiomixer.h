@@ -13,7 +13,7 @@
 class AudioMixer
 {
 public:
-    typedef void (*TrackEndCallback)(int track);
+    typedef void (*TrackEndCallback)(int slot);
 
     typedef AudioTrack Track;
 
@@ -21,20 +21,19 @@ public:
 
     typedef AudioTrack::Fade Fade;
 
+    static const int TRACK_SLOTS = 4;
+
     static const uint16_t UNIT_LEVEL = AudioTrack::UNIT_LEVEL;
 
     static const uint16_t MAX_LEVEL = AudioTrack::MAX_LEVEL;
 
-    static const int TRACKS = 4;
-
     static const size_t AUDIOMIXER_BUFFER_LENGTH = AUDIOMIXER_BUFFER_SIZE / 4;
 
 public:
-    AudioMixer(AudioReader::TellCallback tell_callback,
-               AudioReader::SeekCallback seek_callback,
-               AudioReader::ReadCallback read_callback,
-               TrackEndCallback track_end_callback,
+    AudioMixer(TrackEndCallback track_end_callback,
                unsigned int channels);
+
+    bool addTrack(Track *track);
 
     void scale(uint16_t level);
 
@@ -45,7 +44,7 @@ public:
               Fade fade_mode = Fade::None,
               uint16_t fade_length_ms = 0);
 
-    bool start(int track,
+    bool start(int slot,
                void *file,
                Mode mode,
                bool preload = true,
@@ -57,7 +56,7 @@ public:
               Fade fade_mode = Fade::None,
               uint16_t fade_length_ms = 0);
 
-    void fade(int track,
+    void fade(int slot,
               uint16_t level,
               Fade fade_mode = Fade::None,
               uint16_t fade_length_ms = 0);
@@ -65,7 +64,7 @@ public:
     void stop(Fade fade_mode = Fade::None,
               uint16_t fade_length_ms = 0);
 
-    void stop(int track,
+    void stop(int slot,
               Fade fade_mode = Fade::None,
               uint16_t fade_length_ms = 0);
 
@@ -84,10 +83,9 @@ public:
     }
 
 private:
-    int32_t sample_buffer_[AUDIOMIXER_BUFFER_LENGTH];
+    Track *tracks_[TRACK_SLOTS];
 
-    WavReader readers_[TRACKS];
-    Track tracks_[TRACKS];
+    int32_t sample_buffer_[AUDIOMIXER_BUFFER_LENGTH];
 
     TrackEndCallback track_end_callback_;
 
