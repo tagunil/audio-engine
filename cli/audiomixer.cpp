@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     FILE *wav_file_2 = fopen(argv[2], "r");
     if (wav_file_2 == nullptr) {
         fprintf(stderr, "Cannot open file \"%s\"\n", argv[2]);
+        fclose(wav_file_1);
         return 1;
     }
 
@@ -85,11 +86,15 @@ int main(int argc, char *argv[])
 
     if (mixer.start(wav_file_1, mode, true, level_1) < 0) {
         fprintf(stderr, "Cannot play file 1\n");
+        fclose(wav_file_1);
+        fclose(wav_file_2);
         return 1;
     }
 
     if (mixer.start(wav_file_2, mode, true, level_2) < 0) {
         fprintf(stderr, "Cannot play file 2\n");
+        fclose(wav_file_1);
+        fclose(wav_file_2);
         return 1;
     }
 
@@ -115,6 +120,8 @@ int main(int argc, char *argv[])
         fprintf(stderr,
                 "pa_simple_new() failed: %s\n",
                 pa_strerror(error));
+        fclose(wav_file_1);
+        fclose(wav_file_2);
         return 1;
     }
 
@@ -135,6 +142,8 @@ int main(int argc, char *argv[])
                     "pa_simple_write() failed: %s\n",
                     pa_strerror(error));
             pa_simple_free(stream);
+            fclose(wav_file_1);
+            fclose(wav_file_2);
             return 1;
         }
     }
@@ -144,10 +153,14 @@ int main(int argc, char *argv[])
                 "pa_simple_drain() failed: %s\n",
                 pa_strerror(error));
         pa_simple_free(stream);
+        fclose(wav_file_1);
+        fclose(wav_file_2);
         return 1;
     }
 
     pa_simple_free(stream);
+    fclose(wav_file_1);
+    fclose(wav_file_2);
 
     return 0;
 }

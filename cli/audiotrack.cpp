@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
 
     if (!track.start(wav_file, mode, true, level)) {
         fprintf(stderr, "Cannot play file\n");
+        fclose(wav_file);
         return 1;
     }
 
@@ -109,6 +110,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,
                 "pa_simple_new() failed: %s\n",
                 pa_strerror(error));
+        fclose(wav_file);
         return 1;
     }
 
@@ -129,6 +131,7 @@ int main(int argc, char *argv[])
                     "pa_simple_write() failed: %s\n",
                     pa_strerror(error));
             pa_simple_free(stream);
+            fclose(wav_file);
             return 1;
         }
     }
@@ -138,10 +141,12 @@ int main(int argc, char *argv[])
                 "pa_simple_drain() failed: %s\n",
                 pa_strerror(error));
         pa_simple_free(stream);
+        fclose(wav_file);
         return 1;
     }
 
     pa_simple_free(stream);
+    fclose(wav_file);
 
     return 0;
 }
