@@ -30,7 +30,7 @@ public:
               SeekCallback seek_callback,
               ReadCallback read_callback);
 
-    bool open(void *file_context,
+    bool open(void *file,
               Mode mode = Mode::Single,
               bool preload = true) override;
 

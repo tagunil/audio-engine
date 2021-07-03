@@ -6,9 +6,9 @@
 class AudioReader
 {
 public:
-    typedef size_t (*TellCallback)(void *file_context);
-    typedef bool (*SeekCallback)(void *file_context, size_t offset);
-    typedef size_t (*ReadCallback)(void *file_context, uint8_t *buffer, size_t length);
+    typedef size_t (*TellCallback)(void *file);
+    typedef bool (*SeekCallback)(void *file, size_t offset);
+    typedef size_t (*ReadCallback)(void *file, uint8_t *buffer, size_t length);
 
     enum class Mode
     {
@@ -21,8 +21,8 @@ public:
                 SeekCallback seek_callback,
                 ReadCallback read_callback)
         : opened_(false),
+          file_(nullptr),
           mode_(Mode::Single),
-          file_context_(nullptr),
           tell_callback_(tell_callback),
           seek_callback_(seek_callback),
           read_callback_(read_callback),
@@ -31,7 +31,7 @@ public:
     {
     }
 
-    virtual bool open(void *file_context,
+    virtual bool open(void *file,
                       Mode mode = Mode::Single,
                       bool preload = true) = 0;
 
@@ -64,9 +64,9 @@ public:
 protected:
     bool opened_;
 
-    Mode mode_;
+    void *file_;
 
-    void *file_context_;
+    Mode mode_;
 
     TellCallback tell_callback_;
     SeekCallback seek_callback_;

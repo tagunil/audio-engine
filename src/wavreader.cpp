@@ -50,7 +50,7 @@ WavReader::WavReader(TellCallback tell_callback,
 {
 }
 
-bool WavReader::open(void *file_context,
+bool WavReader::open(void *file,
                      WavReader::Mode mode,
                      bool preload)
 {
@@ -60,7 +60,7 @@ bool WavReader::open(void *file_context,
 
     opened_ = false;
 
-    file_context_ = file_context;
+    file_ = file;
 
     mode_ = mode;
 
@@ -346,17 +346,17 @@ size_t WavReader::decodeToI16(int16_t *buffer, size_t frames, unsigned int upmix
 
 inline size_t WavReader::tell()
 {
-    return tell_callback_(file_context_);
+    return tell_callback_(file_);
 }
 
 inline bool WavReader::seek(size_t offset)
 {
-    return seek_callback_(file_context_, offset);
+    return seek_callback_(file_, offset);
 }
 
 inline size_t WavReader::read(uint8_t *buffer, size_t length)
 {
-    return read_callback_(file_context_, buffer, length);
+    return read_callback_(file_, buffer, length);
 }
 
 inline bool WavReader::readU16(uint16_t *value)
