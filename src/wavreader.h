@@ -14,6 +14,7 @@ class WavReader : public AudioReader
 public:
     enum class Format : unsigned int
     {
+        Unknown = 0,
         Pcm = 1,
 #ifdef HAS_IEEE_FLOAT
         IeeeFloat = 3,

@@ -395,6 +395,8 @@ inline size_t WavReader::decodeNextFrames(size_t frames)
     case Format::IeeeFloat:
         return decodeNextIeeeFloatFrames(frames);
 #endif
+    default:
+        return 0;
     }
 
     return 0;
