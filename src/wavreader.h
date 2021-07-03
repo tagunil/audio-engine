@@ -31,17 +31,17 @@ public:
 
     void init(TellCallback tell_callback,
               SeekCallback seek_callback,
-              ReadCallback read_callback);
+              ReadCallback read_callback) override;
 
     bool open(void *file_context,
               Mode mode = Mode::Single,
-              bool preload = true);
+              bool preload = true) override;
 
-    void close();
+    void close() override;
 
-    void rewind(bool preload = true);
+    void rewind(bool preload = true) override;
 
-    size_t decodeToI16(int16_t *buffer, size_t frames, unsigned int upmixing = 1);
+    size_t decodeToI16(int16_t *buffer, size_t frames, unsigned int upmixing = 1) override;
 
     Format format()
     {
