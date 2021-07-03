@@ -51,7 +51,7 @@ WavReader::WavReader(TellCallback tell_callback,
 }
 
 bool WavReader::open(void *file,
-                     WavReader::Mode mode,
+                     Mode mode,
                      bool preload)
 {
     char chunk_id[4];

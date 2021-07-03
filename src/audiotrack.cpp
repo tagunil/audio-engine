@@ -60,7 +60,7 @@ bool AudioTrack::start(void *file,
                        Mode mode,
                        bool preload,
                        uint16_t level,
-                       AudioTrack::Fade fade_mode,
+                       Fade fade_mode,
                        uint16_t fade_length_ms)
 {
     running_ = false;
@@ -110,7 +110,7 @@ bool AudioTrack::start(void *file,
 }
 
 void AudioTrack::fade(uint16_t level,
-                      AudioTrack::Fade fade_mode,
+                      Fade fade_mode,
                       uint16_t fade_length_ms)
 {
     if (!reader_) {
@@ -145,7 +145,7 @@ void AudioTrack::fade(uint16_t level,
     }
 }
 
-void AudioTrack::stop(AudioTrack::Fade fade_mode,
+void AudioTrack::stop(Fade fade_mode,
                       uint16_t fade_length_ms)
 {
     if (!reader_) {

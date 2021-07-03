@@ -58,7 +58,7 @@ int AudioMixer::start(void *file,
                       Mode mode,
                       bool preload,
                       uint16_t level,
-                      AudioMixer::Fade fade_mode,
+                      Fade fade_mode,
                       uint16_t fade_length_ms)
 {
     for (int slot = 0; slot < TRACK_SLOTS; slot++) {
@@ -112,7 +112,7 @@ bool AudioMixer::start(int slot,
 }
 
 void AudioMixer::fade(uint16_t level,
-                      AudioMixer::Fade fade_mode,
+                      Fade fade_mode,
                       uint16_t fade_length_ms)
 {
     if (level > MAX_LEVEL) {
@@ -126,7 +126,7 @@ void AudioMixer::fade(uint16_t level,
 
 void AudioMixer::fade(int slot,
                       uint16_t level,
-                      AudioMixer::Fade fade_mode,
+                      Fade fade_mode,
                       uint16_t fade_length_ms)
 {
     if (slot >= TRACK_SLOTS) {
