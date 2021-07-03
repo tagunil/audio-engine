@@ -53,10 +53,14 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    const int channels = 2;
+
     WavReader reader(&tell_callback,
                      &seek_callback,
                      &read_callback);
-    AudioTrack track(&reader, 2);
+
+    AudioTrack track(channels);
+    track.addReader(&reader);
 
     AudioTrack::Mode mode = AudioTrack::Mode::Single;
 

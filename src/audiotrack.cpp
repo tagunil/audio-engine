@@ -25,9 +25,11 @@ static inline int16_t saturate(int32_t value)
 #include "cosine.h"
 #endif
 
-AudioTrack::AudioTrack(AudioReader *reader,
-                       unsigned int channels)
-    : channels_(channels),
+AudioTrack::AudioTrack(unsigned int channels)
+    : readers_(),
+      reader_(nullptr),
+      file_(nullptr),
+      channels_(channels),
       upmixing_(1),
       frames_per_ms_(0),
       level_(UNIT_LEVEL),
@@ -37,11 +39,21 @@ AudioTrack::AudioTrack(AudioReader *reader,
       fade_progress_(0),
       initial_level_(0),
       final_level_(0),
-      reader_(reader),
-      file_(nullptr),
       running_(false),
       stopping_(false)
 {
+}
+
+bool AudioTrack::addReader(AudioReader *reader)
+{
+    for (int slot = 0; slot < READER_SLOTS; slot++) {
+        if (!readers_[slot]) {
+            readers_[slot] = reader;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool AudioTrack::start(void *file,
@@ -51,14 +63,18 @@ bool AudioTrack::start(void *file,
                        AudioTrack::Fade fade_mode,
                        uint16_t fade_length_ms)
 {
-    if (!reader_) {
-        return false;
-    }
-
     running_ = false;
     stopping_ = false;
 
-    if (!reader_->open(file, mode, preload)) {
+    reader_ = nullptr;
+
+    for (int slot = 0; slot < READER_SLOTS; slot++) {
+        if (readers_[slot] && readers_[slot]->open(file, mode, preload)) {
+            reader_ = readers_[slot];
+        }
+    }
+
+    if (!reader_) {
         return false;
     }
 

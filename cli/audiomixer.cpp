@@ -5,6 +5,7 @@
 #include <pulse/simple.h>
 #include <pulse/error.h>
 
+#include "wavreader.h"
 #include "audiomixer.h"
 
 size_t tell_callback(void *file_context)
@@ -64,18 +65,24 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    const int channels = 2;
+
     WavReader reader_1(&tell_callback,
                        &seek_callback,
                        &read_callback);
-    AudioTrack track_1(&reader_1, 2);
+
+    AudioTrack track_1(channels);
+    track_1.addReader(&reader_1);
 
     WavReader reader_2(&tell_callback,
                        &seek_callback,
                        &read_callback);
-    AudioTrack track_2(&reader_2, 2);
+
+    AudioTrack track_2(channels);
+    track_2.addReader(&reader_2);
 
     AudioMixer mixer(&track_end_callback,
-                     2);
+                     channels);
     mixer.addTrack(&track_1);
     mixer.addTrack(&track_2);
 

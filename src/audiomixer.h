@@ -7,7 +7,6 @@
 #define AUDIOMIXER_BUFFER_SIZE 4096
 #endif
 
-#include "wavreader.h"
 #include "audiotrack.h"
 
 class AudioMixer
