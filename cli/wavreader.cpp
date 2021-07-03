@@ -85,6 +85,9 @@ int main(int argc, char *argv[])
 
     printf("Format: ");
     switch (reader.format()) {
+    case WavReader::Format::Unknown:
+        printf("Unknown\n");
+        break;
     case WavReader::Format::Pcm:
         printf("PCM\n");
         break;
