@@ -32,13 +32,8 @@ public:
     static const unsigned int MAX_TRACK_CHANNELS = 2;
 
 public:
-    AudioTrack();
-
     AudioTrack(AudioReader *reader,
                unsigned int channels);
-
-    void init(AudioReader *reader,
-              unsigned int channels);
 
     bool start(void *file,
                Mode mode,
@@ -84,8 +79,6 @@ public:
     }
 
 private:
-    bool initialized_;
-
     unsigned int channels_;
     unsigned int upmixing_;
 

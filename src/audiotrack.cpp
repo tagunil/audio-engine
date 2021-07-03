@@ -25,29 +25,9 @@ static inline int16_t saturate(int32_t value)
 #include "cosine.h"
 #endif
 
-AudioTrack::AudioTrack()
-    : initialized_(false),
-      channels_(0),
-      upmixing_(1),
-      frames_per_ms_(0),
-      level_(UNIT_LEVEL),
-      fade_mode_(Fade::None),
-      fade_length_ms_(0),
-      fade_length_(0),
-      fade_progress_(0),
-      initial_level_(0),
-      final_level_(0),
-      reader_(nullptr),
-      file_(nullptr),
-      running_(false),
-      stopping_(false)
-{
-}
-
 AudioTrack::AudioTrack(AudioReader *reader,
                        unsigned int channels)
-    : initialized_(true),
-      channels_(channels),
+    : channels_(channels),
       upmixing_(1),
       frames_per_ms_(0),
       level_(UNIT_LEVEL),
@@ -64,14 +44,6 @@ AudioTrack::AudioTrack(AudioReader *reader,
 {
 }
 
-void AudioTrack::init(AudioReader *reader,
-                      unsigned int channels)
-{
-    reader_ = reader;
-    channels_ = channels;
-    initialized_ = true;
-}
-
 bool AudioTrack::start(void *file,
                        Mode mode,
                        bool preload,
@@ -79,10 +51,6 @@ bool AudioTrack::start(void *file,
                        AudioTrack::Fade fade_mode,
                        uint16_t fade_length_ms)
 {
-    if (!initialized_) {
-        return false;
-    }
-
     if (!reader_) {
         return false;
     }
@@ -128,10 +96,6 @@ void AudioTrack::fade(uint16_t level,
                       AudioTrack::Fade fade_mode,
                       uint16_t fade_length_ms)
 {
-    if (!initialized_) {
-        return;
-    }
-
     if (!reader_) {
         return;
     }
@@ -167,10 +131,6 @@ void AudioTrack::fade(uint16_t level,
 void AudioTrack::stop(AudioTrack::Fade fade_mode,
                       uint16_t fade_length_ms)
 {
-    if (!initialized_) {
-        return;
-    }
-
     if (!reader_) {
         return;
     }
@@ -189,10 +149,6 @@ void AudioTrack::stop(AudioTrack::Fade fade_mode,
 
 void AudioTrack::rewind(bool preload)
 {
-    if (!initialized_) {
-        return;
-    }
-
     if (!reader_) {
         return;
     }
@@ -206,10 +162,6 @@ void AudioTrack::rewind(bool preload)
 
 size_t AudioTrack::play(int16_t *buffer, size_t frames)
 {
-    if (!initialized_) {
-        return 0;
-    }
-
     if (!reader_) {
         return 0;
     }

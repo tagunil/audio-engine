@@ -31,15 +31,6 @@ public:
     {
     }
 
-    virtual void init(TellCallback tell_callback,
-                      SeekCallback seek_callback,
-                      ReadCallback read_callback)
-    {
-        tell_callback_ = tell_callback;
-        seek_callback_ = seek_callback;
-        read_callback_ = read_callback;
-    }
-
     virtual bool open(void *file_context,
                       Mode mode = Mode::Single,
                       bool preload = true) = 0;

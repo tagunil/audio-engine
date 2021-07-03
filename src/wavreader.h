@@ -26,15 +26,9 @@ public:
     static const unsigned int MAX_FRAME_SIZE = 16;
 
 public:
-    WavReader();
-
     WavReader(TellCallback tell_callback,
               SeekCallback seek_callback,
               ReadCallback read_callback);
-
-    void init(TellCallback tell_callback,
-              SeekCallback seek_callback,
-              ReadCallback read_callback) override;
 
     bool open(void *file_context,
               Mode mode = Mode::Single,
