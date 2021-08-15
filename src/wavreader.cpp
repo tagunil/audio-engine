@@ -424,7 +424,9 @@ size_t WavReader::decodeNextIeeeFloatFrames(size_t frames)
 
         for (size_t frame_index = 0; frame_index < frames; frame_index++) {
             for (unsigned int channel = 0; channel < channels_; channel++) {
+                int32_t sample;
                 float value;
+
                 memcpy(&value, sample_pointer, 4);
 
                 if (value > 1.0f) {
@@ -434,8 +436,8 @@ size_t WavReader::decodeNextIeeeFloatFrames(size_t frames)
                 }
 
                 value *= static_cast<float>(INT32_MAX - 127);
+                sample = htole32(static_cast<int32_t>(value));
 
-                int32_t sample = htole32(static_cast<int32_t>(value));
                 memcpy(sample_pointer, &sample, 4);
 
                 sample_pointer += channel_size_;
