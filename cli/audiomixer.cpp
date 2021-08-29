@@ -6,6 +6,7 @@
 #include <pulse/error.h>
 
 #include "wavreader.h"
+#include "mp3reader.h"
 #include "audiomixer.h"
 
 size_t tell_callback(void *file_context)
@@ -52,34 +53,44 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    FILE *wav_file_1 = fopen(argv[1], "r");
-    if (wav_file_1 == nullptr) {
+    FILE *audio_file_1 = fopen(argv[1], "r");
+    if (audio_file_1 == nullptr) {
         fprintf(stderr, "Cannot open file \"%s\"\n", argv[1]);
         return 1;
     }
 
-    FILE *wav_file_2 = fopen(argv[2], "r");
-    if (wav_file_2 == nullptr) {
+    FILE *audio_file_2 = fopen(argv[2], "r");
+    if (audio_file_2 == nullptr) {
         fprintf(stderr, "Cannot open file \"%s\"\n", argv[2]);
-        fclose(wav_file_1);
+        fclose(audio_file_1);
         return 1;
     }
 
     const int channels = 2;
 
-    WavReader reader_1(&tell_callback,
-                       &seek_callback,
-                       &read_callback);
+    WavReader wav_reader_1(&tell_callback,
+                           &seek_callback,
+                           &read_callback);
+
+    Mp3Reader mp3_reader_1(&tell_callback,
+                           &seek_callback,
+                           &read_callback);
 
     AudioTrack track_1(channels);
-    track_1.addReader(&reader_1);
+    track_1.addReader(&wav_reader_1);
+    track_1.addReader(&mp3_reader_1);
 
-    WavReader reader_2(&tell_callback,
-                       &seek_callback,
-                       &read_callback);
+    WavReader wav_reader_2(&tell_callback,
+                           &seek_callback,
+                           &read_callback);
+
+    Mp3Reader mp3_reader_2(&tell_callback,
+                           &seek_callback,
+                           &read_callback);
 
     AudioTrack track_2(channels);
-    track_2.addReader(&reader_2);
+    track_2.addReader(&wav_reader_2);
+    track_2.addReader(&mp3_reader_2);
 
     AudioMixer mixer(&track_end_callback,
                      channels);
@@ -91,17 +102,17 @@ int main(int argc, char *argv[])
     uint16_t level_1 = static_cast<uint16_t>(atof(argv[3]) * AudioMixer::UNIT_LEVEL);
     uint16_t level_2 = static_cast<uint16_t>(atof(argv[4]) * AudioMixer::UNIT_LEVEL);
 
-    if (mixer.start(wav_file_1, mode, true, level_1) < 0) {
+    if (mixer.start(audio_file_1, mode, true, level_1) < 0) {
         fprintf(stderr, "Cannot play file 1\n");
-        fclose(wav_file_1);
-        fclose(wav_file_2);
+        fclose(audio_file_1);
+        fclose(audio_file_2);
         return 1;
     }
 
-    if (mixer.start(wav_file_2, mode, true, level_2) < 0) {
+    if (mixer.start(audio_file_2, mode, true, level_2) < 0) {
         fprintf(stderr, "Cannot play file 2\n");
-        fclose(wav_file_1);
-        fclose(wav_file_2);
+        fclose(audio_file_1);
+        fclose(audio_file_2);
         return 1;
     }
 
@@ -127,8 +138,8 @@ int main(int argc, char *argv[])
         fprintf(stderr,
                 "pa_simple_new() failed: %s\n",
                 pa_strerror(error));
-        fclose(wav_file_1);
-        fclose(wav_file_2);
+        fclose(audio_file_1);
+        fclose(audio_file_2);
         return 1;
     }
 
@@ -149,8 +160,8 @@ int main(int argc, char *argv[])
                     "pa_simple_write() failed: %s\n",
                     pa_strerror(error));
             pa_simple_free(stream);
-            fclose(wav_file_1);
-            fclose(wav_file_2);
+            fclose(audio_file_1);
+            fclose(audio_file_2);
             return 1;
         }
     }
@@ -160,14 +171,14 @@ int main(int argc, char *argv[])
                 "pa_simple_drain() failed: %s\n",
                 pa_strerror(error));
         pa_simple_free(stream);
-        fclose(wav_file_1);
-        fclose(wav_file_2);
+        fclose(audio_file_1);
+        fclose(audio_file_2);
         return 1;
     }
 
     pa_simple_free(stream);
-    fclose(wav_file_1);
-    fclose(wav_file_2);
+    fclose(audio_file_1);
+    fclose(audio_file_2);
 
     return 0;
 }
