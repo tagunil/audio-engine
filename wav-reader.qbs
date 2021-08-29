@@ -25,12 +25,16 @@ Project {
             "src"
         ]
 
-        files: [
-            "cli/wavreader.cpp",
-            "src/wavreader.cpp",
-            "src/wavreader.h",
-            "src/audioreader.h",
-        ]
+        Group {
+            name: "Project sources"
+
+            files: [
+                "cli/wavreader.cpp",
+                "src/wavreader.cpp",
+                "src/wavreader.h",
+                "src/audioreader.h",
+            ]
+        }
 
         Group {
             fileTagsFilter: product.type
