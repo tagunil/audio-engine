@@ -6,6 +6,7 @@
 #include <pulse/error.h>
 
 #include "wavreader.h"
+#include "mp3reader.h"
 #include "audiotrack.h"
 
 size_t tell_callback(void *file_context)
@@ -47,20 +48,25 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    FILE *wav_file = fopen(argv[1], "r");
-    if (wav_file == nullptr) {
+    FILE *audio_file = fopen(argv[1], "r");
+    if (audio_file == nullptr) {
         fprintf(stderr, "Cannot open file \"%s\"\n", argv[1]);
         return 1;
     }
 
     const int channels = 2;
 
-    WavReader reader(&tell_callback,
-                     &seek_callback,
-                     &read_callback);
+    WavReader wav_reader(&tell_callback,
+                         &seek_callback,
+                         &read_callback);
+
+    Mp3Reader mp3_reader(&tell_callback,
+                         &seek_callback,
+                         &read_callback);
 
     AudioTrack track(channels);
-    track.addReader(&reader);
+    track.addReader(&wav_reader);
+    track.addReader(&mp3_reader);
 
     AudioTrack::Mode mode = AudioTrack::Mode::Single;
 
@@ -86,9 +92,9 @@ int main(int argc, char *argv[])
 
     uint16_t level = static_cast<uint16_t>(atof(argv[2]) * AudioTrack::UNIT_LEVEL);
 
-    if (!track.start(wav_file, mode, true, level)) {
+    if (!track.start(audio_file, mode, true, level)) {
         fprintf(stderr, "Cannot play file\n");
-        fclose(wav_file);
+        fclose(audio_file);
         return 1;
     }
 
@@ -114,7 +120,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,
                 "pa_simple_new() failed: %s\n",
                 pa_strerror(error));
-        fclose(wav_file);
+        fclose(audio_file);
         return 1;
     }
 
@@ -135,7 +141,7 @@ int main(int argc, char *argv[])
                     "pa_simple_write() failed: %s\n",
                     pa_strerror(error));
             pa_simple_free(stream);
-            fclose(wav_file);
+            fclose(audio_file);
             return 1;
         }
     }
@@ -145,12 +151,12 @@ int main(int argc, char *argv[])
                 "pa_simple_drain() failed: %s\n",
                 pa_strerror(error));
         pa_simple_free(stream);
-        fclose(wav_file);
+        fclose(audio_file);
         return 1;
     }
 
     pa_simple_free(stream);
-    fclose(wav_file);
+    fclose(audio_file);
 
     return 0;
 }
